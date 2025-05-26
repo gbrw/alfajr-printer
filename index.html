@@ -12,15 +12,66 @@
             margin: 0;
         }
         
+        html, body {
+            width: 100% !important;
+            height: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+        }
+        
         body {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            background: none !important;
+        }
+        
+        .container {
+            display: none !important;
+        }
+        
+        .preview {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            position: absolute !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
             page-break-after: avoid !important;
             page-break-before: avoid !important;
+            page-break-inside: avoid !important;
+            box-shadow: none !important;
+            border: none !important;
+            background: white !important;
+            overflow: hidden !important;
+        }
+        
+        .preview-text {
+            margin: 0 !important;
+            padding: 15mm !important;
+            transform: none !important;
         }
         
         @media only screen and (max-width: 768px) {
-            @page {
-                size: A4 landscape !important;
-                margin: 0 !important;
+            .preview {
+                max-width: none !important;
+                max-height: none !important;
+                transform: translate(-50%, -50%) !important;
+                zoom: 1 !important;
+            }
+            
+            .preview.landscape {
+                transform: translate(-50%, -50%) !important;
+                aspect-ratio: auto !important;
+                height: 100% !important;
+            }
+            
+            .preview-text {
+                transform: none !important;
+                font-size: 16px !important;
             }
         }
     </style>
@@ -436,6 +487,7 @@
                 transform-origin: center top;
                 overflow: hidden; 
                 box-sizing: border-box;
+                position: relative;
             }
             
             .preview.landscape {
@@ -444,19 +496,31 @@
                 height: auto;
                 aspect-ratio: 1.414 / 1;
                 box-sizing: border-box;
-                overflow: hidden; 
+                overflow: hidden;
+                transform: scale(0.95);
+                transform-origin: center center;
             }
             
             @media print {
                 .preview, .preview.landscape {
-                    width: 100% !important;
-                    height: auto !important;
-                    max-width: 100% !important;
+                    transform: none !important;
+                    width: 100vw !important;
+                    height: 100vh !important;
+                    max-width: none !important;
+                    max-height: none !important;
                     margin: 0 !important;
+                    padding: 15mm !important;
                     box-shadow: none !important;
+                    position: fixed !important;
+                    top: 0 !important;
+                    left: 0 !important;
+                    right: 0 !important;
+                    bottom: 0 !important;
                     page-break-after: avoid !important;
                     page-break-before: avoid !important;
                     page-break-inside: avoid !important;
+                    border: none !important;
+                    overflow: hidden !important;
                 }
             }
         }
