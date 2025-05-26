@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>طباعة عروض - الفجر</title>    <style>@media print {
+            @page {
+                /* سيتم تحديث حجم الصفحة عبر JavaScript */
+                margin: 0;
+            }
+            body {
+                margin: 0;
+                padding: 0 !important;
+                overflow: hidden !important;
+            }
+            .no-print {
+                display: none;
+            }
+            .preview {
+                position: absolute !important;
+                top: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                margin: auto !important;
+                padding: 15mm !important;
+                box-sizing: border-box !important;
+                overflow: hidden !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                page-break-after: avoid !important;
+                page-break-before: avoid !important;
+                /* الأبعاد الافتراضية للوضع العمودي */
+                width: 210mm !important;
+                height: 297mm !important;
+            }
+            /* عند اختيار الوضع الأفقي */
+            .preview.landscape {
+                width: 297mm !important;
+                height: 210mm !important;
+            }
+            @page {
+                size: A4 portrait;
+            }
+            @page landscape {
+                size: A4 landscape;
+            }
+        }
+          html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Cairo', 'Arial', sans-serif;
+            background-color: #f0f4f8;
+            background-image: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            margin: 0;
+            padding: 20px;
+            direction: rtl;
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+            transition: background 0.5s ease;
+        }
+        
+        body::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        body::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        body::-webkit-scrollbar-thumb {
+            background: #3498db;
+            border-radius: 10px;
+        }
+        
+        body::-webkit-scrollbar-thumb:hover {
+            background: #2980b9;
+        }
+        
+        /* Loading overlay styles */
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: all 0.5s ease;
+        }
+        
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+          .container {
+            max-width: 850px;
+            margin: 0 auto 20px auto;
+            background-color: white;
+            padding: 25px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            border-top: 4px solid #3498db;
+        }.logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 18px;
+            border-bottom: 2px solid #eaeaea;
+            position: relative;
+        }
+        
+        .logo-container::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #3498db, transparent);
+        }
+        
+        .logo {
+            max-width: 150px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            transition: all 0.4s ease;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
+        }
+        
+        .logo:hover {
+            transform: scale(1.05) rotate(2deg);
+            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.2));
+        }
+          
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 26px;
+            font-weight: 700;
+            text-shadow: 1px 1px 0 rgba(0,0,0,0.1);
+            letter-spacing: 0.5px;
+            position: relative;
+            display: inline-block;
+            padding: 0 10px;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, #3498db, #2ecc71);
+            border-radius: 3px;
+        }
+          .form-group {
+            margin-bottom: 12px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }          textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            min-height: 80px;
+            box-sizing: border-box;
+            direction: rtl;
+            transition: all 0.3s ease;
+            font-family: 'Cairo', 'Arial', sans-serif;
+            resize: vertical;
+            background-color: #fcfcfc;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            background-color: #ffffff;
+            transform: translateY(-1px);
+        }
+          button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-family: 'Cairo', 'Arial', sans-serif;
+            font-weight: 600;
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.5px;
+        }
+        
+        button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(0);
+            transition: transform 0.3s;
+            border-radius: 8px;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
+            filter: brightness(110%);
+        }
+        
+        button:hover::after {
+            transform: scale(1);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        #print-btn {
+            background-color: #27ae60;
+            box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #print-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.6s ease;
+        }
+        
+        #print-btn:hover {
+            background-color: #219955;
+            box-shadow: 0 6px 12px rgba(39, 174, 96, 0.4);
+            transform: translateY(-3px);
+        }
+        
+        #print-btn:hover:before {
+            left: 100%;
+        }
+        
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #eaeaea;
+            position: relative;
+        }
+        
+        .buttons::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(to right, #eaeaea, #3498db, #eaeaea);
+            opacity: 0.7;
+        }.preview {
+            width: 210mm;
+            height: 297mm;
+            margin: 50px auto;
+            background-color: white;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.1);
+            padding: 15mm;
+            box-sizing: border-box;
+            display: block; /* Show preview by default */
+            position: relative;
+            transition: all 0.5s ease;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transform: perspective(1000px) rotateX(2deg);
+            z-index: 1;
+        }
+        
+        .preview::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -15px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            z-index: -1;
+            transform: perspective(1000px) rotateX(2deg);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        @keyframes previewHighlight {
+            0% { box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.1); }
+            50% { box-shadow: 0 15px 40px rgba(52, 152, 219, 0.4), 0 5px 10px rgba(52, 152, 219, 0.2); }
+            100% { box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.1); }
+        }
+        
+        .highlight-preview {
+            animation: previewHighlight 1s ease;
+        }.preview-text {
+            margin-bottom: 15mm;
+            font-size: 16px;
+            line-height: 1.5;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            padding: 5mm;
+            position: relative;
+            transition: all 0.3s ease;
+            transform-origin: center center;
+        }
+        
+        .preview:hover .preview-text {
+            transform: scale(1.01);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.15);
+        }.font-controls {
+            margin-bottom: 20px;
+        }
+        
+        .font-controls select {
+            padding: 8px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }          .text-section {
+            border: 1px solid #e6e6e6;
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 25px;
+            background-color: #f9f9f9;
+            background-image: linear-gradient(to bottom, #ffffff, #f9f9f9);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.07);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-right: 3px solid #3498db;
+        }
+        
+        .text-section:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            border-right-color: #2ecc71;
+        }
+        
+        .text-section:focus-within {
+            transform: translateY(-2px);
+            border-right-color: #3498db;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.15);
+            background-image: linear-gradient(to bottom, #ffffff, #f0f8ff);
+        }
+        
+        .section-title {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            letter-spacing: 0.5px;
+        }
+        
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 22px;
+            background: linear-gradient(to bottom, #3498db, #2980b9);
+            margin-left: 10px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .text-section:hover .section-title::before {
+            width: 10px;
+            background: linear-gradient(to bottom, #2ecc71, #27ae60);
+            transform: translateX(-2px);
+        }
+        
+        .text-controls {
+            display: flex;
+            margin-top: 8px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .size-control, .color-control, .font-family-control {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+          .size-control label, .color-control label, .font-family-control label {
+            font-size: 12px;
+            margin: 0;
+        }
+          .font-size-select, .font-family-select, .border-select {
+            padding: 10px 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+            transition: all 0.3s ease;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="6"><path d="M0 0l6 6 6-6z" fill="%23666"/></svg>');
+            background-repeat: no-repeat;
+            background-position: left 10px center;
+            padding-left: 28px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            font-family: 'Cairo', 'Arial', sans-serif;
+        }
+        
+        .font-size-select:focus, .font-family-select:focus, .border-select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            transform: translateY(-1px);
+            background-color: #fcfcfc;
+        }
+          
+        .color-picker {
+            margin-right: 10px;
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+        }
+        
+        .color-presets {
+            display: flex;
+            margin-top: 10px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .color-preset {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: all 0.25s ease;
+            position: relative;
+        }
+        
+        .color-preset::after {
+            content: '';
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            bottom: -4px;
+            left: -4px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+        
+        .color-preset:hover {
+            transform: scale(1.15);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+        }
+        
+        .color-preset.active::after {
+            border-color: #3498db;
+        }
+        
+        .font-size-input-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+          .font-size-input {
+            width: 70px;
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            font-family: 'Cairo', 'Arial', sans-serif;
+        }
+        
+        .font-size-input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .text-style-control {
+            margin-top: 10px;
+        }
+        
+        .text-style-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 5px;
+        }
+          .copyright {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            margin-top: 25px;
+            padding: 15px 0 5px 0;
+            border-top: 1px solid #eaeaea;
+            direction: ltr;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .copyright::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #3498db, transparent);
+            transform: translateX(-50%);
+        }
+        
+        .settings-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 15px;
+            background: linear-gradient(145deg, #f9f9f9, #f0f0f0);
+            border-radius: 10px;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .background-control, .opacity-control, .orientation-control {
+            margin-bottom: 10px;
+        }
+          .upload-label {
+            margin-bottom: 10px;
+            display: block;
+            font-weight: bold;
+        }
+        
+        .upload-container {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100px;
+            background-color: #f8f9fa;
+            border: 2px dashed #3498db;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        
+        .upload-container:hover {
+            background-color: #e8f4fc;
+            border-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .upload-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            color: #3498db;
+            font-weight: bold;
+        }
+        
+        .file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .file-input:focus + .upload-icon {
+            color: #2980b9;
+        }
+        
+        .opacity-slider {
+            width: 200px;
+            margin: 0 10px;
+            vertical-align: middle;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 6px;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 1));
+            border-radius: 5px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .opacity-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #3498db;
+            cursor: pointer;
+            border: 2px solid #fff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+        }
+        
+        .opacity-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            background: #2980b9;
+        }
+        
+        .opacity-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #3498db;
+            cursor: pointer;
+            border: 2px solid #fff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+        }
+        
+        .opacity-slider::-moz-range-thumb:hover {
+            transform: scale(1.1);
+            background: #2980b9;
+        }
+        
+        #opacity-value {
+            font-weight: bold;
+            color: #2c3e50;
+            min-width: 40px;
+            display: inline-block;
+        }
+        
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            padding: 5px;
+            border-radius: 10px;
+            background-color: rgba(236, 240, 245, 0.5);
+        }
+          .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 8px;
+            transition: all 0.25s ease;
+            margin-bottom: 5px;
+            background-color: #f5f7fa;
+            border: 1px solid transparent;
+        }
+        
+        .radio-label:hover {
+            background-color: #e8f0fe;
+            border-color: #d0e3ff;
+        }
+        
+        .radio-label input[type="radio"]:checked + .size-info {
+            font-weight: bold;
+        }
+          .paper-size-info {
+            margin-top: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: #2c3e50;
+            font-weight: bold;
+            padding: 8px 15px;
+            background: linear-gradient(to right, #f1f9ff, #e6f3ff);
+            border-radius: 8px;
+            display: inline-block;
+            border: 1px solid #d0e6ff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .size-info {
+            font-size: 11px;
+            color: #777;
+            margin-right: 5px;
+        }
+        
+        .scale-control {
+            margin-top: 15px;
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 5px 10px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            background-color: #f5f7fa;
+            border: 1px solid transparent;
+        }
+        
+        .checkbox-label:hover {
+            background-color: #e8f0fe;
+            border-color: #d0e3ff;
+        }
+        
+        .border-control {
+            margin-top: 15px;
+        }
+        
+        .border-select {
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 5px;
+            width: 100%;
+            max-width: 200px;
+        }
+        
+        .border-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .border-width-control {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .border-width-input-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .border-width-input-group input {
+            width: 60px;
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: 'Cairo', 'Arial', sans-serif;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        
+        .border-width-input-group input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        @media screen and (max-width: 600px) {
+            .preview {
+                width: 100%;
+                height: auto;
+                min-height: 80vh;
+            }
+        }
+        
+        /* إضافة كلاس للاتجاه الأفقي */
+        .preview.landscape {
+            width: 297mm;
+            height: 210mm;
+        }
+
+        /* تعديلات الطباعة */
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
+            
+            .preview {
+                width: 210mm !important;
+                height: 297mm !important;
+            }
+            
+            .preview.landscape {
+                width: 297mm !important;
+                height: 210mm !important;
+            }
+        }
+        
+        .background-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 8px;
+            margin-bottom: 12px;
+            padding: 10px;
+            border-radius: 8px;
+            background: linear-gradient(to right, #f1f1f1, #f9f9f9);
+            border: 1px solid #eaeaea;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
+    <div class="container no-print"><div class="logo-container">
+            <img src="alfajr.PNG" alt="شعار الفجر" class="logo">
+            <h1>طباعة عروض - الفجر</h1>
+        </div><div class="text-section">
+            <h2 class="section-title">النص الأول</h2>
+            <div class="form-group">                <label for="text1">المحتوى:</label>
+                <textarea id="text1" placeholder="أدخل النص الأول هنا...">عرض خاص</textarea>
+                <div class="text-controls">                    <div class="size-control">
+                        <label for="font-size1">حجم الخط:</label>
+                        <div class="font-size-input-group">
+                            <input type="number" id="font-size1" class="font-size-input" value="100" min="10" max="200">
+                            <span>px</span>
+                        </div>
+                    </div>                    <div class="font-family-control">
+                        <label for="font-family1">نوع الخط:</label>
+                        <select id="font-family1" class="font-family-select">
+                            <option value="Arial, sans-serif">Arial</option>
+                            <option value="'Droid Arabic Kufi', 'Arial', sans-serif">Droid Arabic Kufi</option>
+                            <option value="'Amiri', serif">Amiri</option>
+                            <option value="'Cairo', sans-serif">Cairo</option>
+                            <option value="'Tajawal', sans-serif">Tajawal</option>
+                        </select>
+                    </div>
+                    <div class="text-style-control">
+                        <label>نمط النص:</label>
+                        <div class="text-style-options">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="bold1" checked> <strong>غامق</strong>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="italic1"> <em>مائل</em>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="underline1"> <u>تحته خط</u>
+                            </label>
+                        </div>
+                    </div>                    <div class="color-control">
+                        <label>اللون:</label>
+                        <input type="hidden" id="font-color1" value="#FF0000">
+                        <div class="color-presets">
+                            <div class="color-preset active" data-color="#FF0000" style="background-color: #FF0000;"></div>
+                            <div class="color-preset" data-color="#FF6600" style="background-color: #FF6600;"></div>
+                            <div class="color-preset" data-color="#FFCC00" style="background-color: #FFCC00;"></div>
+                            <div class="color-preset" data-color="#009900" style="background-color: #009900;"></div>
+                            <div class="color-preset" data-color="#0066CC" style="background-color: #0066CC;"></div>
+                            <div class="color-preset" data-color="#9900CC" style="background-color: #9900CC;"></div>
+                            <div class="color-preset" data-color="#000000" style="background-color: #000000;"></div>
+                            <div class="color-preset" data-color="#2ecc71" style="background-color: #2ecc71;"></div>
+                            <div class="color-preset" data-color="#e74c3c" style="background-color: #e74c3c;"></div>
+                            <div class="color-preset" data-color="#3498db" style="background-color: #3498db;"></div>
+                            <div class="color-preset" data-color="#f1c40f" style="background-color: #f1c40f;"></div>
+                            <div class="color-preset" data-color="#9b59b6" style="background-color: #9b59b6;"></div>
+                            <div class="color-preset" data-color="#1abc9c" style="background-color: #1abc9c;"></div>
+                            <div class="color-preset" data-color="#e67e22" style="background-color: #e67e22;"></div>
+                            <div class="color-preset" data-color="#34495e" style="background-color: #34495e;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-section">
+            <h2 class="section-title">النص الثاني</h2>
+            <div class="form-group">                <label for="text2">المحتوى:</label>
+                <textarea id="text2" placeholder="أدخل اسم المادة هنا...">أدخل اسم المادة</textarea>
+                <div class="text-controls">                    <div class="size-control">
+                        <label for="font-size2">حجم الخط:</label>
+                        <div class="font-size-input-group">
+                            <input type="number" id="font-size2" class="font-size-input" value="60" min="10" max="200">
+                            <span>px</span>
+                        </div>
+                    </div>                    <div class="font-family-control">
+                        <label for="font-family2">نوع الخط:</label>
+                        <select id="font-family2" class="font-family-select">
+                            <option value="Arial, sans-serif">Arial</option>
+                            <option value="'Droid Arabic Kufi', 'Arial', sans-serif">Droid Arabic Kufi</option>
+                            <option value="'Amiri', serif">Amiri</option>
+                            <option value="'Cairo', sans-serif">Cairo</option>
+                            <option value="'Tajawal', sans-serif">Tajawal</option>
+                        </select>
+                    </div>
+                    <div class="text-style-control">
+                        <label>نمط النص:</label>
+                        <div class="text-style-options">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="bold2" checked> <strong>غامق</strong>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="italic2"> <em>مائل</em>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="underline2"> <u>تحته خط</u>
+                            </label>
+                        </div>
+                    </div>                    <div class="color-control">
+                        <label>اللون:</label>
+                        <input type="hidden" id="font-color2" value="#000000">
+                        <div class="color-presets">
+                            <div class="color-preset" data-color="#FF0000" style="background-color: #FF0000;"></div>
+                            <div class="color-preset" data-color="#FF6600" style="background-color: #FF6600;"></div>
+                            <div class="color-preset" data-color="#FFCC00" style="background-color: #FFCC00;"></div>
+                            <div class="color-preset" data-color="#009900" style="background-color: #009900;"></div>
+                            <div class="color-preset active" data-color="#0066CC" style="background-color: #0066CC;"></div>
+                            <div class="color-preset" data-color="#9900CC" style="background-color: #9900CC;"></div>
+                            <div class="color-preset" data-color="#000000" style="background-color: #000000;"></div>
+                            <div class="color-preset" data-color="#2ecc71" style="background-color: #2ecc71;"></div>
+                            <div class="color-preset" data-color="#e74c3c" style="background-color: #e74c3c;"></div>
+                            <div class="color-preset" data-color="#3498db" style="background-color: #3498db;"></div>
+                            <div class="color-preset" data-color="#f1c40f" style="background-color: #f1c40f;"></div>
+                            <div class="color-preset" data-color="#9b59b6" style="background-color: #9b59b6;"></div>
+                            <div class="color-preset" data-color="#1abc9c" style="background-color: #1abc9c;"></div>
+                            <div class="color-preset" data-color="#e67e22" style="background-color: #e67e22;"></div>
+                            <div class="color-preset" data-color="#34495e" style="background-color: #34495e;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-section">
+            <h2 class="section-title">النص الثالث</h2>
+            <div class="form-group">                <label for="text3">المحتوى:</label>
+                <textarea id="text3" placeholder="أدخل سعر المادة هنا...">أدخل سعر المادة</textarea>
+                <div class="text-controls">                    <div class="size-control">
+                        <label for="font-size3">حجم الخط:</label>
+                        <div class="font-size-input-group">
+                            <input type="number" id="font-size3" class="font-size-input" value="100" min="10" max="200">
+                            <span>px</span>
+                        </div>
+                    </div>                    <div class="font-family-control">
+                        <label for="font-family3">نوع الخط:</label>
+                        <select id="font-family3" class="font-family-select">
+                            <option value="Arial, sans-serif">Arial</option>
+                            <option value="'Droid Arabic Kufi', 'Arial', sans-serif">Droid Arabic Kufi</option>
+                            <option value="'Amiri', serif">Amiri</option>
+                            <option value="'Cairo', sans-serif">Cairo</option>
+                            <option value="'Tajawal', sans-serif">Tajawal</option>
+                        </select>
+                    </div>
+                    <div class="text-style-control">
+                        <label>نمط النص:</label>
+                        <div class="text-style-options">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="bold3" checked> <strong>غامق</strong>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="italic3"> <em>مائل</em>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="underline3"> <u>تحته خط</u>
+                            </label>
+                        </div>
+                    </div>                    <div class="color-control">
+                        <label>اللون:</label>
+                        <input type="hidden" id="font-color3" value="#000000">
+                        <div class="color-presets">
+                            <div class="color-preset" data-color="#FF0000" style="background-color: #FF0000;"></div>
+                            <div class="color-preset active" data-color="#FF6600" style="background-color: #FF6600;"></div>
+                            <div class="color-preset" data-color="#FFCC00" style="background-color: #FFCC00;"></div>
+                            <div class="color-preset" data-color="#009900" style="background-color: #009900;"></div>
+                            <div class="color-preset" data-color="#0066CC" style="background-color: #0066CC;"></div>
+                            <div class="color-preset" data-color="#9900CC" style="background-color: #9900CC;"></div>
+                            <div class="color-preset" data-color="#000000" style="background-color: #000000;"></div>
+                            <div class="color-preset" data-color="#2ecc71" style="background-color: #2ecc71;"></div>
+                            <div class="color-preset" data-color="#e74c3c" style="background-color: #e74c3c;"></div>
+                            <div class="color-preset" data-color="#3498db" style="background-color: #3498db;"></div>
+                            <div class="color-preset" data-color="#f1c40f" style="background-color: #f1c40f;"></div>
+                            <div class="color-preset" data-color="#9b59b6" style="background-color: #9b59b6;"></div>
+                            <div class="color-preset" data-color="#1abc9c" style="background-color: #1abc9c;"></div>
+                            <div class="color-preset" data-color="#e67e22" style="background-color: #e67e22;"></div>
+                            <div class="color-preset" data-color="#34495e" style="background-color: #34495e;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>          <div class="text-section">
+            <h2 class="section-title">إعدادات التصميم</h2>
+            <div class="form-group">                <div class="settings-controls">
+                    <div class="background-control">
+                        <label>خيارات الخلفية:</label>
+                        <div class="background-options">
+                            <label class="radio-label">
+                                <input type="radio" name="background-option" value="default" checked> الخلفية الافتراضية
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="background-option" value="custom"> خلفية مخصصة
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="background-option" value="none"> بدون خلفية
+                            </label>
+                        </div>                        <div id="custom-background-option" style="margin-top: 15px; display: none;">
+                            <label for="background-image" class="upload-label">اختر صورة مخصصة:</label>
+                            <div class="upload-container">
+                                <input type="file" id="background-image" accept="image/*" class="file-input">
+                                <div class="upload-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 6V18M18 12L6 12" stroke="#3498db" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                    <span>اختر صورة</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="opacity-control">                        <label for="background-opacity">شفافية الخلفية:</label>
+                        <input type="range" id="background-opacity" min="0" max="1" step="0.1" value="0.2" class="opacity-slider">
+                        <span id="opacity-value">20%</span>
+                    </div><div class="orientation-control">
+                        <label>اتجاه الصفحة:</label>                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="orientation" value="portrait" checked>
+                                عمودي (A4)
+                                <span class="size-info">210×297 مم</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="orientation" value="landscape">
+                                أفقي (A4)
+                                <span class="size-info">297×210 مم</span>
+                            </label>
+                        </div>
+                    </div>                    <div class="scale-control">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="scale-to-fit" checked>
+                            ملائمة الصفحة
+                        </label>
+                    </div>
+
+                    <div class="border-control">
+                        <label for="border-style">إطار البوستر:</label>
+                        <select id="border-style" class="border-select">
+                            <option value="none">بدون إطار</option>
+                            <option value="solid">إطار بسيط</option>
+                            <option value="double">إطار مزدوج</option>
+                            <option value="dashed">إطار متقطع</option>
+                            <option value="dotted">إطار منقط</option>
+                            <option value="groove">إطار محفور</option>
+                            <option value="ridge">إطار بارز</option>
+                        </select>
+                        <div class="border-options">
+                            <div class="border-width-control">
+                                <label for="border-width">سمك الإطار:</label>
+                                <div class="border-width-input-group">
+                                    <input type="number" id="border-width" value="2" min="1" max="15">
+                                    <span>px</span>
+                                </div>
+                            </div>                            <div class="color-control">                                <label for="border-color">لون الإطار:</label>
+                                <input type="hidden" id="border-color" value="#000000">
+                                <div class="color-presets">
+                                    <div class="color-preset active" data-color="#000000" style="background-color: #000000;"></div>
+                                    <div class="color-preset" data-color="#FF0000" style="background-color: #FF0000;"></div>
+                                    <div class="color-preset" data-color="#FF6600" style="background-color: #FF6600;"></div>
+                                    <div class="color-preset" data-color="#FFCC00" style="background-color: #FFCC00;"></div>
+                                    <div class="color-preset" data-color="#009900" style="background-color: #009900;"></div>
+                                    <div class="color-preset" data-color="#0066CC" style="background-color: #0066CC;"></div>
+                                    <div class="color-preset" data-color="#9900CC" style="background-color: #9900CC;"></div>
+                                    <div class="color-preset" data-color="#2ecc71" style="background-color: #2ecc71;"></div>
+                                    <div class="color-preset" data-color="#e74c3c" style="background-color: #e74c3c;"></div>
+                                    <div class="color-preset" data-color="#3498db" style="background-color: #3498db;"></div>
+                                    <div class="color-preset" data-color="#f1c40f" style="background-color: #f1c40f;"></div>
+                                    <div class="color-preset" data-color="#9b59b6" style="background-color: #9b59b6;"></div>
+                                    <div class="color-preset" data-color="#1abc9c" style="background-color: #1abc9c;"></div>
+                                    <div class="color-preset" data-color="#e67e22" style="background-color: #e67e22;"></div>
+                                    <div class="color-preset" data-color="#34495e" style="background-color: #34495e;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>        <div class="buttons">
+            <button id="preview-btn">الذهاب إلى المعاينة</button>
+            <button onclick="printPreview()" id="print-btn">
+                            طباعة
+                        </button>
+        </div>
+        <div class="copyright no-print">جميع الحقوق محفوظة &copy; 2023 طباعة عروض - الفجر</div>
+    </div>      <div class="preview" id="preview">
+        <div class="preview-text" id="preview-text1"></div>
+        <div class="preview-text" id="preview-text2"></div>
+        <div class="preview-text" id="preview-text3"></div>
+    </div>
+    
+    <script>
+        // إضافة روابط الخطوط العربية
+        const fontLink = document.createElement('link');
+        fontLink.rel = 'stylesheet';
+        fontLink.href = 'https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;700&family=Droid+Arabic+Kufi:wght@400;700&family=Tajawal:wght@400;700&display=swap';
+        document.head.appendChild(fontLink);
+        
+        // مربعات النصوص
+        const text1 = document.getElementById('text1');
+        const text2 = document.getElementById('text2');
+        const text3 = document.getElementById('text3');
+        
+        // عناصر المعاينة
+        const preview = document.getElementById('preview');
+        const previewText1 = document.getElementById('preview-text1');
+        const previewText2 = document.getElementById('preview-text2');
+        const previewText3 = document.getElementById('preview-text3');
+        
+        // خيارات التنسيق
+        const fontFamily1 = document.getElementById('font-family1');
+        const fontFamily2 = document.getElementById('font-family2');
+        const fontFamily3 = document.getElementById('font-family3');
+        const fontSize1 = document.getElementById('font-size1');
+        const fontSize2 = document.getElementById('font-size2');
+        const fontSize3 = document.getElementById('font-size3');
+        const fontColor1 = document.getElementById('font-color1');
+        const fontColor2 = document.getElementById('font-color2');
+        const fontColor3 = document.getElementById('font-color3');
+        const textAlign = 'center';
+        
+        // إعدادات إضافية
+        const backgroundImage = document.getElementById('background-image');
+        const backgroundOpacity = document.getElementById('background-opacity');
+        const opacityValue = document.getElementById('opacity-value');
+        const orientationRadios = document.querySelectorAll('input[name="page-orientation"]');
+        const borderStyle = document.getElementById('border-style');
+        const borderWidth = document.getElementById('border-width');
+        const borderColor = document.getElementById('border-color');
+        const backgroundOptions = document.querySelectorAll('input[name="background-option"]');
+        const customBackgroundOption = document.getElementById('custom-background-option');
+        
+        // أزرار التحكم
+        const previewBtn = document.getElementById('preview-btn');
+        const printBtn = document.getElementById('print-btn');
+        
+        // تفعيل الألوان عند الضغط عليها
+        document.querySelectorAll('.color-preset').forEach(preset => {
+            preset.addEventListener('click', function() {
+                const color = this.getAttribute('data-color');
+                const parent = this.closest('.color-control');
+                
+                // إزالة التفعيل من جميع الألوان في نفس المجموعة
+                parent.querySelectorAll('.color-preset').forEach(p => p.classList.remove('active'));
+                // تفعيل اللون المختار
+                this.classList.add('active');
+
+                if (parent.closest('.border-control')) {
+                    // إذا كان في قسم الإطار
+                    borderColor.value = color;
+                } else {
+                    // إذا كان في أقسام النصوص
+                    const section = parent.closest('.text-section');
+                    const sectionIndex = Array.from(document.querySelectorAll('.text-section')).indexOf(section);
+                    const fontColorInput = document.getElementById(`font-color${sectionIndex + 1}`);
+                    if (fontColorInput) {
+                        fontColorInput.value = color;
+                    }
+                }
+                updatePreview();
+            });
+        });
+
+        // تحديث المعاينة
+        function updatePreview() {
+            previewText1.textContent = text1.value;
+            previewText2.textContent = text2.value;
+            previewText3.textContent = text3.value;
+
+            const text1Size = fontSize1.value;
+            const text2Size = fontSize2.value;
+            const text3Size = fontSize3.value;
+
+            // تطبيق التنسيقات للنص الأول
+            previewText1.style.marginBottom = Math.max(20, text1Size / 2) + 'px';
+            previewText1.style.fontFamily = fontFamily1.value;
+            previewText1.style.fontSize = text1Size + 'px';
+            previewText1.style.color = fontColor1.value;
+            previewText1.style.textAlign = textAlign;
+            previewText1.style.fontWeight = document.getElementById('bold1').checked ? 'bold' : 'normal';
+            previewText1.style.fontStyle = document.getElementById('italic1').checked ? 'italic' : 'normal';
+            previewText1.style.textDecoration = document.getElementById('underline1').checked ? 'underline' : 'none';
+            previewText1.style.zIndex = '2';
+            previewText1.style.position = 'relative';
+
+            // تطبيق التنسيقات للنص الثاني
+            previewText2.style.marginBottom = Math.max(20, text2Size / 2) + 'px';
+            previewText2.style.fontFamily = fontFamily2.value;
+            previewText2.style.fontSize = text2Size + 'px';
+            previewText2.style.color = fontColor2.value;
+            previewText2.style.textAlign = textAlign;
+            previewText2.style.fontWeight = document.getElementById('bold2').checked ? 'bold' : 'normal';
+            previewText2.style.fontStyle = document.getElementById('italic2').checked ? 'italic' : 'normal';
+            previewText2.style.textDecoration = document.getElementById('underline2').checked ? 'underline' : 'none';
+            previewText2.style.zIndex = '2';
+            previewText2.style.position = 'relative';
+
+            // تطبيق التنسيقات للنص الثالث
+            previewText3.style.marginBottom = Math.max(20, text3Size / 2) + 'px';
+            previewText3.style.fontFamily = fontFamily3.value;
+            previewText3.style.fontSize = text3Size + 'px';
+            previewText3.style.color = fontColor3.value;
+            previewText3.style.textAlign = textAlign;
+            previewText3.style.fontWeight = document.getElementById('bold3').checked ? 'bold' : 'normal';
+            previewText3.style.fontStyle = document.getElementById('italic3').checked ? 'italic' : 'normal';
+            previewText3.style.textDecoration = document.getElementById('underline3').checked ? 'underline' : 'none';
+            previewText3.style.zIndex = '2';
+            previewText3.style.position = 'relative';
+
+            // تحديث خيارات الخلفية
+            const selectedBackgroundOption = document.querySelector('input[name="background-option"]:checked').value;
+            const opacity = backgroundOpacity.value;
+            preview.style.backgroundColor = 'white';
+            preview.style.position = 'relative';
+            
+            const backgroundDiv = document.createElement('div');
+            backgroundDiv.style.position = 'absolute';
+            backgroundDiv.style.top = '0';
+            backgroundDiv.style.left = '0';
+            backgroundDiv.style.right = '0';
+            backgroundDiv.style.bottom = '0';
+            backgroundDiv.style.zIndex = '1';
+            backgroundDiv.style.opacity = opacity;
+            
+            if (selectedBackgroundOption === 'none') {
+                preview.style.backgroundImage = 'none';
+                backgroundDiv.remove();
+            } else if (selectedBackgroundOption === 'default') {
+                backgroundDiv.style.backgroundImage = 'url("alfajr.PNG")';
+                backgroundDiv.style.backgroundSize = 'contain';
+                backgroundDiv.style.backgroundPosition = 'center';
+                backgroundDiv.style.backgroundRepeat = 'no-repeat';
+                preview.appendChild(backgroundDiv);
+            } else if (selectedBackgroundOption === 'custom' && backgroundImage.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    backgroundDiv.style.backgroundImage = `url(${e.target.result})`;
+                    backgroundDiv.style.backgroundSize = 'contain';
+                    backgroundDiv.style.backgroundPosition = 'center';
+                    backgroundDiv.style.backgroundRepeat = 'no-repeat';
+                };
+                reader.readAsDataURL(backgroundImage.files[0]);
+                preview.appendChild(backgroundDiv);
+            }
+
+            // Remove any existing background divs except the current one
+            preview.querySelectorAll('div').forEach(div => {
+                if (div !== backgroundDiv && div !== previewText1 && div !== previewText2 && div !== previewText3) {
+                    div.remove();
+                }
+            });            // تطبيق الإطار
+            const selectedBorderStyle = borderStyle.value;
+            const borderWidthValue = borderWidth.value;
+            const selectedBorderColor = borderColor ? borderColor.value : '#000000';
+            
+            if (selectedBorderStyle !== 'none') {
+                preview.style.border = `${borderWidthValue}px ${selectedBorderStyle} ${selectedBorderColor}`;
+            } else {
+                preview.style.border = 'none';
+            }
+            
+            // تأكد من أن الإطار يظهر فوق الخلفية
+            preview.style.position = 'relative';
+            preview.style.zIndex = '1';
+        }
+
+        // زر الطباعة
+        printBtn.addEventListener('click', function() {
+            // تحديث المعاينة قبل الطباعة
+            updatePreview();
+            window.print();
+        });        // تفعيل الخلفية المخصصة
+        backgroundOptions.forEach(option => {
+            option.addEventListener('change', function() {
+                if (this.value === 'custom') {
+                    customBackgroundOption.style.display = 'block';
+                } else {
+                    customBackgroundOption.style.display = 'none';
+                }
+                updatePreview();
+            });
+        });
+
+        // تحديث المعاينة عند اختيار صورة مخصصة
+        backgroundImage.addEventListener('change', updatePreview);
+
+        // تفعيل التحديث المباشر
+        text1.addEventListener('input', updatePreview);
+        text2.addEventListener('input', updatePreview);
+        text3.addEventListener('input', updatePreview);
+        fontSize1.addEventListener('input', updatePreview);
+        fontSize2.addEventListener('input', updatePreview);
+        fontSize3.addEventListener('input', updatePreview);
+        fontFamily1.addEventListener('change', updatePreview);
+        fontFamily2.addEventListener('change', updatePreview);
+        fontFamily3.addEventListener('change', updatePreview);
+        document.getElementById('bold1').addEventListener('change', updatePreview);
+        document.getElementById('italic1').addEventListener('change', updatePreview);
+        document.getElementById('underline1').addEventListener('change', updatePreview);
+        document.getElementById('bold2').addEventListener('change', updatePreview);
+        document.getElementById('italic2').addEventListener('change', updatePreview);
+        document.getElementById('underline2').addEventListener('change', updatePreview);
+        document.getElementById('bold3').addEventListener('change', updatePreview);
+        document.getElementById('italic3').addEventListener('change', updatePreview);
+        document.getElementById('underline3').addEventListener('change', updatePreview);
+        borderStyle.addEventListener('change', updatePreview);
+        borderWidth.addEventListener('input', updatePreview);        backgroundOpacity.addEventListener('input', function() {
+            opacityValue.textContent = Math.round(this.value * 100) + '%';
+            updatePreview();
+        });
+
+        // تحديث لون الإطار عند اختيار لون جديد
+        document.querySelectorAll('.border-control .color-preset').forEach(preset => {
+            preset.addEventListener('click', function() {
+                const color = this.getAttribute('data-color');
+                borderColor.value = color;
+                updatePreview();
+            });
+        });        // تحديث اتجاه الصفحة
+        orientationRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                const orientation = this.value;
+                const styleSheet = document.styleSheets[0];
+                
+                // البحث عن قاعدة @page وتحديثها
+                for (let i = 0; i < styleSheet.cssRules.length; i++) {
+                    const rule = styleSheet.cssRules[i];
+                    if (rule.type === CSSRule.MEDIA_RULE && rule.conditionText.includes('print')) {
+                        for (let j = 0; j < rule.cssRules.length; j++) {
+                            const subRule = rule.cssRules[j];
+                            if (subRule.selectorText === '@page') {
+                                if (orientation === 'landscape') {
+                                    subRule.style.size = 'A4 landscape';
+                                } else {
+                                    subRule.style.size = 'A4 portrait';
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+                
+                // تحديث حجم المعاينة
+                if (orientation === 'landscape') {
+                    preview.style.width = '297mm';
+                    preview.style.height = '210mm';
+                } else {
+                    preview.style.width = '210mm';
+                    preview.style.height = '297mm';
+                }
+            });
+        });
+
+        // تشغيل المعاينة عند تحميل الصفحة
+        window.addEventListener('load', function() {
+            const loadingOverlay = document.getElementById('loading-overlay');
+            if (loadingOverlay) {
+                loadingOverlay.style.opacity = '0';
+                setTimeout(() => {
+                    loadingOverlay.style.display = 'none';
+                }, 500);
+            }
+            updatePreview();
+        });
+    </script>
+    <script>
+        // تهيئة متغيرات التحكم في الاتجاه
+        const previewElem = document.getElementById('preview');
+        const orientationInputs = document.getElementsByName('orientation');
+
+        // دالة تحديث اتجاه الصفحة
+        function updateOrientation(orientationType) {
+            if (orientationType === 'landscape') {
+                previewElem.classList.add('landscape');
+                document.documentElement.style.setProperty('--page-size', 'A4 landscape');
+            } else {
+                previewElem.classList.remove('landscape');
+                document.documentElement.style.setProperty('--page-size', 'A4 portrait');
+            }
+        }
+
+        // إضافة مستمعي الأحداث لأزرار الاتجاه
+        orientationInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                updateOrientation(this.value);
+                // تحديث اتجاه الطباعة
+                const style = document.createElement('style');
+                style.textContent = `@page { size: ${this.value === 'landscape' ? 'A4 landscape' : 'A4 portrait'}; }`;
+                document.head.appendChild(style);
+            });
+        });
+
+        // دالة الطباعة
+        function printPreview() {
+            window.print();
+        }
+
+        // إخفاء شاشة التحميل عند اكتمال تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('loading-overlay').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
