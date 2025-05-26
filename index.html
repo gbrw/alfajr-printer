@@ -2,91 +2,29 @@
 <html lang="ar" dir="rtl">
 <head>    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="print-mode" content="single-page">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri&display=swap">
+    <meta name="theme-color" content="#3498db">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">    <title>طباعة عروض - الفجر</title>    
+    <!-- إضافة أنماط مخصصة للطباعة من الهاتف المحمول -->
     <style media="print">
         @page {
             size: A4 landscape;
             margin: 0;
-            padding: 0;
-            marks: none;
-        }
-        html, body {
-            width: 100%;
-            height: 100vh;
-            overflow: hidden;
-            margin: 0;
-            padding: 0;
-            page-break-after: avoid;
-            page-break-before: avoid;
-            page-break-inside: avoid;
-        }
-        .preview {
-            position: fixed;
-            transform-origin: top center;
-            transform: scale(0.95);
-            page-break-after: avoid;
-            page-break-before: avoid;
-        }
-    </style>
-    
-    <!-- Critical mobile print fix -->
-    <style media="only print and (max-width: 767px)">
-        @page {
-            size: A4 !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            marks: none !important;
-        }
-        
-        html {
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-            height: 100vh !important;
-            margin: 0 !important;
-            padding: 0 !important;
         }
         
         body {
-            height: 100vh !important;
-            width: 100% !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            overflow: hidden !important;
-            position: fixed !important;
-        }
-        
-        .preview {
-            height: 100vh !important;
-            max-height: 100vh !important;
-            width: 100% !important;
-            transform: scale(0.9) !important;
-            transform-origin: top center !important;
-            position: fixed !important;
-            top: 0 !important;
-            right: 0 !important;
-            left: 0 !important;
-            margin: 0 auto !important;
-            box-sizing: border-box !important;
-            display: block !important;
-            overflow: hidden !important;
-            page-break-inside: avoid !important;
-            page-break-before: avoid !important;
             page-break-after: avoid !important;
+            page-break-before: avoid !important;
         }
         
-        .preview-text {
-            margin-bottom: 5mm !important;
-        }
-        
-        #preview-text3 {
-            margin-bottom: 0 !important;
+        @media only screen and (max-width: 768px) {
+            @page {
+                size: A4 landscape !important;
+                margin: 0 !important;
+            }
         }
     </style>
-    <meta name="theme-color" content="#3498db">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">    <title>طباعة عروض - الفجر</title>    <style>
+    <style>
           html {
             scroll-behavior: smooth;
             scroll-padding-top: 10px;
@@ -507,6 +445,19 @@
                 aspect-ratio: 1.414 / 1;
                 box-sizing: border-box;
                 overflow: hidden; 
+            }
+            
+            @media print {
+                .preview, .preview.landscape {
+                    width: 100% !important;
+                    height: auto !important;
+                    max-width: 100% !important;
+                    margin: 0 !important;
+                    box-shadow: none !important;
+                    page-break-after: avoid !important;
+                    page-break-before: avoid !important;
+                    page-break-inside: avoid !important;
+                }
             }
         }
         
@@ -1231,44 +1182,10 @@
         .preview.landscape {
             width: 297mm;
             height: 210mm;
-        }
-        
-        @media only print and (max-width: 767px) {
-            @page {
-                size: A4 !important;
-                margin: 0 !important;
-                marks: none !important;
-            }
-            
-            html, body {
-                width: 100% !important;
-                height: 100vh !important;
-                overflow: hidden !important;
-            }
-            
-            .preview {
-                width: 100% !important;
-                height: 100vh !important;
-                max-height: 100vh !important;
-                transform: scale(0.95) !important;
-                transform-origin: top center !important;
-                page-break-after: always !important;
-                page-break-inside: avoid !important;
-                page-break-before: avoid !important;
-                position: fixed !important;
-                margin: 0 !important;
-            }
-            
-            .preview-text {
-                margin-bottom: 5mm !important;
-            }
-        }
-                
-        @media print {
+        }               @media print {
             @page {
                 size: A4 landscape;
                 margin: 0;
-                marks: none;
             }
             
             body {
@@ -1280,7 +1197,7 @@
                 print-color-adjust: exact !important;
                 page-break-after: avoid !important;
                 page-break-before: avoid !important;
-                height: 100vh !important;
+                height: 100% !important;
             }
             
             .no-print, .container {
@@ -1310,9 +1227,7 @@
                 width: 210mm !important;
                 height: 297mm !important;
                 overflow: hidden !important;
-                max-height: 100vh !important;
-                zoom: 1 !important;
-                min-height: 0 !important;
+                max-height: 100% !important;
             }
             
             .preview.landscape {
@@ -1329,6 +1244,33 @@
             
             .mobile-navigation, .loading-overlay {
                 display: none !important;
+            }
+        }
+        
+        /* ضوابط خاصة للطباعة من الهاتف المحمول */
+        @media only print and (max-width: 767px) {
+            html, body {
+                height: 100% !important;
+                overflow: hidden !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                width: 100% !important;
+            }
+            
+            .preview {
+                page-break-after: avoid !important;
+                page-break-before: avoid !important;
+                page-break-inside: avoid !important;
+                margin: 0 auto !important;
+                position: absolute !important;
+                top: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                display: block !important;
+            }
+            
+            .preview-text {
+                margin-bottom: 5mm !important;
             }
         }
         
@@ -1711,16 +1653,8 @@
             const text1Size = fontSize1.value;
             const text2Size = fontSize2.value;
             const text3Size = fontSize3.value;
-            
-            // Determine if we're on mobile
-            const isMobile = window.matchMedia('(max-width: 768px)').matches;
-            
-            // Adjust margin for better print layout
-            const marginBottom1 = isMobile ? Math.max(10, text1Size / 3) : Math.max(20, text1Size / 2);
-            const marginBottom2 = isMobile ? Math.max(10, text2Size / 3) : Math.max(20, text2Size / 2);
-            const marginBottom3 = isMobile ? 0 : Math.max(20, text3Size / 2);
 
-            previewText1.style.marginBottom = marginBottom1 + 'px';
+            previewText1.style.marginBottom = Math.max(20, text1Size / 2) + 'px';
             previewText1.style.fontFamily = fontFamily1.value;
             previewText1.style.fontSize = text1Size + 'px';
             previewText1.style.color = fontColor1.value;
@@ -1731,7 +1665,7 @@
             previewText1.style.zIndex = '2';
             previewText1.style.position = 'relative';
 
-            previewText2.style.marginBottom = marginBottom2 + 'px';
+            previewText2.style.marginBottom = Math.max(20, text2Size / 2) + 'px';
             previewText2.style.fontFamily = fontFamily2.value;
             previewText2.style.fontSize = text2Size + 'px';
             previewText2.style.color = fontColor2.value;
@@ -1742,7 +1676,7 @@
             previewText2.style.zIndex = '2';
             previewText2.style.position = 'relative';
 
-            previewText3.style.marginBottom = marginBottom3 + 'px';
+            previewText3.style.marginBottom = Math.max(20, text3Size / 2) + 'px';
             previewText3.style.fontFamily = fontFamily3.value;
             previewText3.style.fontSize = text3Size + 'px';
             previewText3.style.color = fontColor3.value;
@@ -1919,55 +1853,32 @@
                 }, 500);
             }
             
-            // Apply mobile print fix
+            // إضافة تعديلات للطباعة من الأجهزة المحمولة
             if (window.matchMedia('(max-width: 768px)').matches) {
-                // Add permanent mobile print fixes
-                const mobilePrintStyles = document.createElement('style');
-                mobilePrintStyles.id = 'mobile-print-permanent-fixes';
-                mobilePrintStyles.innerHTML = `
+                // إضافة نمط دائم للطباعة من الهاتف المحمول
+                const mobilePrintStyle = document.createElement('style');
+                mobilePrintStyle.innerHTML = `
                     @media print {
-                        @page {
-                            size: A4 !important;
-                            margin: 0 !important;
-                            padding: 0 !important;
-                            marks: none !important;
+                        @page { 
+                            size: A4 landscape !important;
+                            margin: 0 !important; 
                         }
                         
-                        html, body {
-                            height: 100vh !important;
-                            width: 100% !important;
+                        body {
                             overflow: hidden !important;
-                            position: relative !important;
-                            margin: 0 !important;
-                            padding: 0 !important;
+                            page-break-after: avoid !important;
+                            page-break-before: avoid !important;
+                            page-break-inside: avoid !important;
                         }
                         
                         .preview {
-                            overflow: hidden !important;
-                            page-break-inside: avoid !important;
                             page-break-after: avoid !important;
                             page-break-before: avoid !important;
-                            height: 100vh !important;
-                            max-height: 100vh !important;
-                            position: fixed !important;
-                            top: 0 !important;
-                            left: 0 !important;
-                            right: 0 !important;
-                            margin: 0 auto !important;
-                            transform: scale(0.9) !important;
-                            transform-origin: top center !important;
-                        }
-                        
-                        .preview-text {
-                            margin-bottom: 5mm !important;
-                        }
-                        
-                        #preview-text3 {
-                            margin-bottom: 0 !important;
+                            page-break-inside: avoid !important;
                         }
                     }
                 `;
-                document.head.appendChild(mobilePrintStyles);
+                document.head.appendChild(mobilePrintStyle);
             }
             
             updateOrientation('landscape');
@@ -1992,18 +1903,6 @@
         printStyleElement.textContent = `@page { size: A4 landscape; }`;
         document.head.appendChild(printStyleElement);
         
-        // Add mobile-specific print style
-        const mobilePrintStyleElement = document.createElement('style');
-        mobilePrintStyleElement.id = 'mobile-print-style';
-        mobilePrintStyleElement.textContent = `
-            @media only print and (max-width: 767px) {
-                @page { size: 100% !important; margin: 0 !important; }
-                html, body { height: 100% !important; overflow: hidden !important; }
-                .preview { transform: scale(1) !important; height: auto !important; }
-            }
-        `;
-        document.head.appendChild(mobilePrintStyleElement);
-        
         orientationInputs.forEach(input => {
             input.addEventListener('change', function() {
                 updateOrientation(this.value);
@@ -2019,8 +1918,7 @@
             const originalHeight = preview.style.height;
             const originalOverflow = preview.style.overflow;
             
-            // Set fixed dimensions for consistent printing
-            const orientation = document.querySelector('input[name="orientation"]:checked').value;
+            // تحقق مما إذا كان الجهاز هاتفًا محمولًا
             const isMobile = window.matchMedia('(max-width: 768px)').matches;
             
             const selectedBorderStyle = borderStyle ? borderStyle.value : 'solid';
@@ -2055,169 +1953,84 @@
                         page-break-after: avoid !important;
                         page-break-before: avoid !important;
                         page-break-inside: avoid !important;
-                        min-height: 0 !important;
-                        zoom: 1 !important;
-                        width: ${document.querySelector('input[name="orientation"]:checked').value === 'landscape' ? '297mm' : '210mm'} !important;
-                        height: ${document.querySelector('input[name="orientation"]:checked').value === 'landscape' ? '210mm' : '297mm'} !important;
-                        position: absolute !important;
-                        top: 0 !important;
-                        left: 0 !important;
-                        right: 0 !important;
                     }
                 }
                 
+                /* تعديلات خاصة للطباعة من الهاتف المحمول */
                 @media only print and (max-width: 767px) {
                     @page {
-                        size: ${orientation === 'landscape' ? 'A4 landscape' : 'A4'} !important;
+                        size: ${document.querySelector('input[name="orientation"]:checked').value === 'landscape' ? 'A4 landscape' : 'A4 portrait'} !important;
                         margin: 0 !important;
-                        marks: none !important;
                     }
                     
-                    body, html {
-                        width: 100% !important;
-                        height: 100vh !important;
-                        overflow: hidden !important;
-                        margin: 0 !important;
-                        padding: 0 !important;
+                    html, body {
+                        height: 100% !important;
+                        -webkit-print-color-adjust: exact !important;
+                        print-color-adjust: exact !important;
+                        page-break-after: avoid !important;
+                        page-break-before: avoid !important;
                     }
                     
                     .preview {
-                        max-height: 100vh !important;
-                        height: 100vh !important;
-                        transform: scale(0.95) !important;
-                        transform-origin: top center !important;
-                        position: fixed !important;
-                        top: 0 !important;
-                        left: 0 !important;
-                        right: 0 !important;
-                        margin: 0 !important;
-                    }
-                    
-                    .preview-text {
-                        margin-bottom: 5mm !important;
-                    }
-                    
-                    #preview-text3 {
-                        margin-bottom: 0 !important;
+                        border: ${selectedBorderStyle !== 'none' ? `${borderWidthValue}px ${selectedBorderStyle} ${selectedBorderColor}` : 'none'} !important;
+                        page-break-after: avoid !important;
+                        page-break-before: avoid !important;
+                        page-break-inside: avoid !important;
                     }
                 }
             `;
             document.head.appendChild(enhancedPrintStyle);
             
             setTimeout(() => {
-                // On mobile, ensure we're not scaling the page in a way that causes multiple pages
+                // تعديلات خاصة للهاتف المحمول
                 if (isMobile) {
-                    // Force single page printing on mobile
-                    document.body.style.setProperty('height', '100vh', 'important');
-                    document.body.style.setProperty('overflow', 'hidden', 'important');
-                    document.documentElement.style.setProperty('height', '100vh', 'important');
-                    document.documentElement.style.setProperty('overflow', 'hidden', 'important');
-                    document.documentElement.style.setProperty('margin', '0', 'important');
-                    document.documentElement.style.setProperty('padding', '0', 'important');
-                    
-                    // Set preview properties for one-page printing
-                    preview.style.setProperty('height', '100vh', 'important');
-                    preview.style.setProperty('max-height', '100vh', 'important');
-                    preview.style.setProperty('position', 'fixed', 'important');
-                    preview.style.setProperty('margin', '0 auto', 'important');
-                    preview.style.setProperty('transform-origin', 'top center', 'important');
-                    preview.style.setProperty('transform', 'scale(0.95)', 'important');
-                    
-                    // Apply additional mobile-specific styles for print
-                    const mobilePrintFix = document.createElement('style');
-                    mobilePrintFix.id = 'mobile-print-fix';
-                    mobilePrintFix.innerHTML = `
+                    // إضافة نمط إضافي للهاتف المحمول
+                    const mobilePrintStyle = document.createElement('style');
+                    mobilePrintStyle.id = 'mobile-print-fix';
+                    mobilePrintStyle.innerHTML = `
                         @media print {
-                            @page { 
-                                size: ${orientation === 'landscape' ? 'A4 landscape' : 'A4'} !important;
-                                margin: 0mm !important;
-                                padding: 0mm !important;
-                                marks: none !important;
+                            html, body {
+                                overflow: hidden !important;
+                                height: 100% !important;
                             }
                             
-                            html, body {
-                                height: 100vh !important;
-                                width: 100% !important;
-                                overflow: hidden !important;
-                                position: fixed !important;
-                                margin: 0 !important;
-                                padding: 0 !important;
+                            body * {
+                                page-break-after: avoid !important;
+                                page-break-before: avoid !important;
+                                page-break-inside: avoid !important;
                             }
-                            .preview-text {
-                                margin-bottom: 5mm !important;
-                                font-size: 95% !important;
-                            }
-                            #preview-text3 {
-                                margin-bottom: 0 !important;
-                            }
+                            
                             .preview {
-                                max-height: 100vh !important;
-                                height: 100vh !important;
                                 position: fixed !important;
-                                top: 0 !important;
-                                left: 0 !important;
-                                right: 0 !important;
-                                transform: scale(0.95) !important;
-                                transform-origin: top center !important;
-                                margin: 0 !important;
+                                max-height: 100% !important;
+                                height: auto !important;
+                                display: block !important;
                             }
                         }
                     `;
-                    document.head.appendChild(mobilePrintFix);
-                }
-                
-                // Apply final adjustments for mobile print specifically to prevent multiple pages
-                if (isMobile) {
-                    const printModeStyle = document.createElement('style');
-                    printModeStyle.id = 'print-mode-final-fix';
-                    printModeStyle.innerHTML = `
-                        @page { size: A4 ${orientation} !important; marks: none !important; }
-                        @media print {
-                            body { height: 100vh !important; position: fixed !important; }
-                            .preview { height: 100vh !important; max-height: 100vh !important; }
-                            .preview-text { margin-bottom: 5mm !important; }
-                        }
-                    `;
-                    document.head.appendChild(printModeStyle);
-                }
-                
-                // Use a small timeout to ensure all styles are applied before printing
-                setTimeout(() => {
-                    window.print();
+                    document.head.appendChild(mobilePrintStyle);
                     
-                    // Remove the final fix style
-                    if (isMobile) {
-                        const finalFixStyle = document.getElementById('print-mode-final-fix');
-                        if (finalFixStyle) finalFixStyle.remove();
-                    }
-                }, 100);
+                    // تقليص هوامش العناصر للتأكد من توافقها مع صفحة واحدة
+                    const previewTexts = document.querySelectorAll('.preview-text');
+                    previewTexts.forEach(text => {
+                        text.style.marginBottom = '5mm';
+                    });
+                }
+                
+                window.print();
                 
                 setTimeout(() => {
                     preview.style.border = originalBorder;
                     preview.style.height = originalHeight;
                     preview.style.overflow = originalOverflow;
                     
-                    if (isMobile) {
-                        document.body.style.removeProperty('height');
-                        document.body.style.removeProperty('overflow');
-                        document.documentElement.style.removeProperty('height');
-                        document.documentElement.style.removeProperty('overflow');
-                        document.documentElement.style.removeProperty('margin');
-                        document.documentElement.style.removeProperty('padding');
-                        
-                        preview.style.removeProperty('height');
-                        preview.style.removeProperty('max-height');
-                        preview.style.removeProperty('position');
-                        preview.style.removeProperty('margin');
-                        preview.style.removeProperty('transform-origin');
-                        preview.style.removeProperty('transform');
-                        
-                        const mobilePrintFix = document.getElementById('mobile-print-fix');
-                        if (mobilePrintFix) mobilePrintFix.remove();
-                    }
-                    
+                    // حذف الأنماط المضافة
                     const enhancedStyle = document.getElementById('enhanced-print-border');
                     if (enhancedStyle) enhancedStyle.remove();
+                    
+                    const mobilePrintFix = document.getElementById('mobile-print-fix');
+                    if (mobilePrintFix) mobilePrintFix.remove();
+                    
                     isPrinting = false;
                 }, 500);
             }, 200);
